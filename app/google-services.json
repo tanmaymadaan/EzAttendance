@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "400337754317",
+    "firebase_url": "https://ezattendance-400b4.firebaseio.com",
+    "project_id": "ezattendance-400b4",
+    "storage_bucket": "ezattendance-400b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400337754317:android:838c00e3da629fc2757184",
+        "android_client_info": {
+          "package_name": "com.tanmaymadaan.ezattendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400337754317-9bjeto16aondh8nqemqaemnf0j6bg5u1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tanmaymadaan.ezattendance",
+            "certificate_hash": "1e40c452eaf822d841f249c80408039a2d3a0360"
+          }
+        },
+        {
+          "client_id": "400337754317-jf0ipod56r3i7td5cbhm2ev43ds6psd1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoCnNxuYPSvqhTtgly5p1XO2pYVE43dIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400337754317-jf0ipod56r3i7td5cbhm2ev43ds6psd1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
