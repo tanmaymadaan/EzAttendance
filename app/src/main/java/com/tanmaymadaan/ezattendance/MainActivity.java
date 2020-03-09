@@ -9,28 +9,43 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String UID;
     private int goal = 0;
+    private Button addSubject;
+    private FirebaseFirestore db;
+    private String UID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        addSubject = findViewById(R.id.main_add_subject);
+        addSubject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MainActivity", "addSubject");
+                openAddSubjectDialog();
+            }
+        });
+
+        UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-
-        UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         final SharedPreferences preferences = getSharedPreferences("first-time", Context.MODE_PRIVATE);
         boolean bool = preferences.getBoolean("first-timer", false);
@@ -68,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.d("goal",String.valueOf(goal));
+                    alert.dismiss();
                 }
             });
 
@@ -75,5 +91,31 @@ public class MainActivity extends AppCompatActivity {
 
 
         //}
+    }
+
+    private void openAddSubjectDialog(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.add_subject_layout, null);
+        final EditText editText = view.findViewById(R.id.dialog_add_subject);
+        Button ok, cancel;
+        ok = view.findViewById(R.id.addSubjectSubmit);
+        cancel = view.findViewById(R.id.cancelSubject);
+        builder.setView(view);
+        final AlertDialog alert = builder.create();
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                addSubject(editText.getText().toString().trim());
+            }
+        });
+        alert.show();
+    }
+
+    private void addSubject(String subject) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("total", 0);
+        map.put("present", 0);
+        db.collection(UID).document(subject).set(map);
     }
 }
