@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tanmaymadaan.ezattendance.Models.UsersSubject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Button addSubject;
     private FirebaseFirestore db;
     private String UID;
+    private ArrayList<UsersSubject> subjectArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +45,17 @@ public class MainActivity extends AppCompatActivity {
 
         UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+        {
+            Intent intent = new Intent(MainActivity.this,StartActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         final SharedPreferences preferences = getSharedPreferences("first-time", Context.MODE_PRIVATE);
@@ -89,11 +100,10 @@ public class MainActivity extends AppCompatActivity {
 
             alert.show();
 
-
         //}
     }
 
-    private void openAddSubjectDialog(){
+    private void openAddSubjectDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         View view = getLayoutInflater().inflate(R.layout.add_subject_layout, null);
         final EditText editText = view.findViewById(R.id.dialog_add_subject);
@@ -117,5 +127,14 @@ public class MainActivity extends AppCompatActivity {
         map.put("total", 0);
         map.put("present", 0);
         db.collection(UID).document(subject).set(map);
+
+        UsersSubject usersSubject = new UsersSubject();
+        usersSubject.setSubjectname(subject);
+        usersSubject.setTotal(0);
+        usersSubject.setGoal(goal);
+        usersSubject.setPresent(0);
+        usersSubject.setPercentage(0);
+        usersSubject.setStatus("You are right on track");
+        subjectArrayList.add(usersSubject);
     }
 }
